@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced To-Do List</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #6a11cb, #2575fc);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding-top: 50px;
+        transition: background 0.3s ease;
+        position: relative;
+    }
+    body.dark {
+        background: linear-gradient(to right, #232526, #414345);
+        color: #f0f0f0;
+    }
+    .container {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        padding: 30px 40px;
+        width: 420px;
+        max-width: 95%;
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+    body.dark .container {
+        background: #2a2a2a;
+        color: #f0f0f0;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #2575fc;
+        text-shadow: 1px 1px 2px #6a11cb;
+    }
+    body.dark h1 {
+        color: #fff;
+        text-shadow: 1px 1px 2px #444;
+    }
+    .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    input[type="text"], select {
+        flex: 1;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        transition: all 0.2s ease;
+    }
+    input[type="text"]:focus {
+        outline: none;
+        border-color: #2575fc;
+        box-shadow: 0 0 5px #2575fc;
+    }
+    button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        background: #2575fc;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    button:hover {
+        background: #6a11cb;
+        transform: scale(1.05);
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+    li:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    li.completed {
+        text-decoration: line-through;
+        color: gray;
+        background: #d3f4ff;
+    }
+    .delete-btn {
+        background: #ff4b5c;
+        border: none;
+        color: #fff;
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 12px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+    li:hover .delete-btn {
+        opacity: 1;
+    }
+    .delete-btn:hover {
+        background: #c41e2a;
+    }
+    .priority {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .high { background: #ff4b5c; }
+    .medium { background: #ffcc00; }
+    .low { background: #28a745; }
+    .task-info {
+        display: flex;
+        align-items: center;
+        flex: 1;
+    }
+    .filters {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        justify-content: center;
+    }
+    .filters button {
+        padding: 6px 12px;
+        font-size: 14px;
+        transform: none;
+    }
+    .task-count {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 5px;
+        background: #2575fc;
+        color: #fff;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<button class="theme-toggle">Dark Mode</button>
+<div class="container">
+    <h1>Advanced To-Do List</h1>
+    <div class="input-group">
+        <input type="text" id="task-input" placeholder="Add a new task">
+        <select id="priority">
+            <option value="high">High</option>
+            <option value="medium" selected>Medium</option>
+            <option value="low">Low</option>
+        </select>
+        <button id="add-btn">Add</button>
+    </div>
+    <ul id="task-list"></ul>
+    <div class="filters">
+        <button data-filter="all">All</button>
+        <button data-filter="active">Active</button>
+        <button data-filter="completed">Completed</button>
+        <button id="clear-completed">Clear Completed</button>
+    </div>
+    <div class="task-count" id="task-count">0 tasks remaining</div>
+</div>
+
+<script>
+const taskInput = document.getElementById('task-input');
+const addBtn = document.getElementById('add-btn');
+const taskList = document.getElementById('task-list');
+const prioritySelect = document.getElementById('priority');
+const filters = document.querySelectorAll('.filters button[data-filter]');
+const clearBtn = document.getElementById('clear-completed');
+const taskCount = document.getElementById('task-count');
+const themeToggle = document.querySelector('.theme-toggle');
+
+// Load tasks
+window.addEventListener('load', () => {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.forEach(t => createTask(t.text, t.completed, t.priority));
+    updateCount();
+});
+
+// Add task
+addBtn.addEventListener('click', () => {
+    addTask();
+});
+taskInput.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') addTask();
+});
+
+function addTask() {
+    const text = taskInput.value.trim();
+    const priority = prioritySelect.value;
+    if(text) {
+        createTask(text, false, priority);
+        taskInput.value = '';
+        saveTasks();
+        updateCount();
+    }
+}
+
+// Create task
+function createTask(text, completed, priority) {
+    const li = document.createElement('li');
+
+    const info = document.createElement('div');
+    info.className = 'task-info';
+
+    const dot = document.createElement('div');
+    dot.className = `priority ${priority}`;
+
+    const span = document.createElement('span');
+    span.textContent = text;
+    span.contentEditable = true;
+    span.addEventListener('blur', saveTasks);
+
+    info.appendChild(dot);
+    info.appendChild(span);
+    li.appendChild(info);
+
+    if(completed) li.classList.add('completed');
+
+    // Toggle complete on li click except delete or span
+    li.addEventListener('click', e => {
+        if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'SPAN') {
+            li.classList.toggle('completed');
+            saveTasks();
+            updateCount();
+        }
+    });
+
+    // Delete button
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Delete';
+    delBtn.className = 'delete-btn';
+    delBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        li.remove();
+        saveTasks();
+        updateCount();
+    });
+
+    li.appendChild(delBtn);
+    taskList.appendChild(li);
+}
+
+// Save tasks
+function saveTasks() {
+    const tasks = [];
+    taskList.querySelectorAll('li').forEach(li => {
+        const text = li.querySelector('span').textContent;
+        const completed = li.classList.contains('completed');
+        const priorityClass = li.querySelector('.priority').classList;
+        let priority = 'medium';
+        if(priorityClass.contains('high')) priority = 'high';
+        else if(priorityClass.contains('low')) priority = 'low';
+        tasks.push({text, completed, priority});
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+// Filter tasks
+filters.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        taskList.querySelectorAll('li').forEach(li => {
+            li.style.display = 'flex';
+            if(filter === 'active' && li.classList.contains('completed')) li.style.display = 'none';
+            if(filter === 'completed' && !li.classList.contains('completed')) li.style.display = 'none';
+        });
+    });
+});
+
+// Clear completed
+clearBtn.addEventListener('click', () => {
+    taskList.querySelectorAll('li.completed').forEach(li => li.remove());
+    saveTasks();
+    updateCount();
+});
+
+// Update task count
+function updateCount() {
+    const remaining = taskList.querySelectorAll('li:not(.completed)').length;
+    taskCount.textContent = `${remaining} task(s) remaining`;
+}
+
+// Theme toggle
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    themeToggle.textContent = document.body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+});
+</script>
+</body>
+</html>
