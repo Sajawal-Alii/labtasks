@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab 10 - JSON Fetch App</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+     <style>
+        body {
+    font-family: Arial;
+    background: #f5f5f5;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* #productList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+} */
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px #ccc;
+}
+
+     </style>
+</head>
+<body>
+
+    <h1>Product List (JSON + ES6)</h1>
+
+    <div class="controls">
+        <select id="sortSelect">
+            <option value="none">Sort By</option>
+            <option value="name">Name (A-Z)</option>
+            <option value="price">Price (Low-High)</option>
+        </select>
+
+        <input type="number" id="priceFilter" placeholder="Max Price">
+        <button id="filterBtn">Apply Filter</button>
+    </div>
+
+    <div id="productList"></div>
+
+    <script > 
+        const productList = document.getElementById("productList");
+const sortSelect = document.getElementById("sortSelect");
+const priceFilter = document.getElementById("priceFilter");
+const filterBtn = document.getElementById("filterBtn");
+
+let products = [];
+
+// Fetch JSON using ES6 + fetch + async/await
+const loadProducts = async () => {
+    const res = await fetch("products.json");
+    products = await res.json();
+    displayProducts(products);
+};
+
+// Render products
+const displayProducts = (items) => {
+    productList.innerHTML = items.map(({ name, price, category }) => `
+        <div class="card">
+            <h3>${name}</h3>
+            <p>Price: $${price}</p>
+            <p>Category: ${category}</p>
+        </div>
+    `).join("");
+};
+
+// Sorting
+sortSelect.addEventListener("change", () => {
+    let sorted = [...products];
+
+    if (sortSelect.value === "name") {
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    if (sortSelect.value === "price") {
+        sorted.sort((a, b) => a.price - b.price);
+    }
+
+    displayProducts(sorted);
+});
+
+// Filtering
+filterBtn.addEventListener("click", () => {
+    const maxPrice = Number(priceFilter.value);
+
+    const filtered = products.filter(p => p.price <= maxPrice);
+
+    displayProducts(filtered);
+});
+
+// Load JSON on start
+ loadProducts();
+
+    </script>
+</body>
+</html>
