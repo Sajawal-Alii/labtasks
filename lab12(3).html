@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 12 - CSRF Token Demo</title>
+</head>
+<body>
+
+<h2>🔐 CSRF Protection Demo</h2>
+
+<form onsubmit="return validateToken()">
+  <input type="hidden" id="csrfToken" value="SECURE123TOKEN">
+  
+  <input type="text" placeholder="Enter comment" required>
+  <br><br>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+function validateToken() {
+  var token = document.getElementById("csrfToken").value;
+
+  // ✅ Mock server-side token check
+  if (token !== "SECURE123TOKEN") {
+    alert("CSRF Attack Detected!");
+    return false;
+  }
+
+  alert("Form submitted safely!");
+  return true;
+}
+</script>
+
+</body>
+</html>

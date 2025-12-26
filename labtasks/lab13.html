@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sajawal Ali | Portfolio</title>
+<meta name="description" content="Portfolio of Sajawal Ali, front-end developer showcasing projects, skills, and contact information.">
+
+<!-- JSON-LD structured data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Sajawal Ali",
+  "jobTitle": "Front-End Web Developer",
+  "url": "https://your-portfolio-url.com"
+}
+</script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+html { scroll-behavior: smooth; }
+body, html { margin:0; padding:0; font-family:Poppins,sans-serif; color:white; }
+
+/* Navbar */
+.main-nav {
+  position: fixed; top:0; width:100%; z-index:100; background:rgba(0,0,0,0.7); padding:10px 0;
+  box-shadow:0 2px 10px rgba(0,0,0,0.5);
+}
+.main-nav ul {
+  display:flex; justify-content:center; list-style:none; gap:40px;
+}
+.main-nav a {
+  color:white; text-decoration:none; font-weight:bold; position:relative; transition:0.3s;
+}
+.main-nav a::after { content:''; width:0; height:2px; background:#ffcc00; display:block; margin:auto; transition:0.3s; }
+.main-nav a:hover::after { width:100%; }
+
+/* Sections - animated gradient background */
+section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: white;
+  padding: 50px 20px;
+  background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff416c, #ff4b2b);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Overlay for readability */
+section::before {
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  z-index:0;
+}
+
+section > * {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+}
+
+/* Typography */
+h1{ font-size:3.5rem; margin-bottom:20px; }
+h2{ font-size:2.5rem; margin-bottom:20px; }
+p{ font-size:1.2rem; margin-bottom:20px; line-height:1.6; }
+
+/* Hero Section */
+.hero-content { text-align:center; }
+
+/* About Section */
+.about-content { display:flex; align-items:center; gap:50px; flex-wrap:wrap; justify-content:center; text-align:center; }
+
+/* Projects Section */
+.projects-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap:20px;
+  width:100%;
+}
+.projects-box {
+  background:rgba(0,0,0,0.6); padding:25px; border-radius:15px;
+  text-align:center; transition:transform 0.3s, box-shadow 0.3s;
+}
+.projects-box:hover { transform:scale(1.05); box-shadow:0 10px 25px rgba(0,0,0,0.7); }
+
+/* Contact Section */
+.contact-box { background:rgba(0,0,0,0.6); padding:30px; border-radius:15px; max-width:500px; margin:auto; }
+
+/* Buttons */
+.btn {
+  padding:12px 30px; border-radius:30px; background:#ffcc00; color:black; font-weight:bold; text-decoration:none;
+  transition: all 0.3s; box-shadow:0 5px 15px rgba(0,0,0,0.4);
+}
+.btn:hover { background:#e6b800; transform:scale(1.1); box-shadow:0 10px 25px rgba(0,0,0,0.6); }
+
+/* Footer */
+footer { text-align:center; padding:20px; background:rgba(0,0,0,0.7); font-size:1rem; }
+.highlight { color:#ffcc00; }
+
+/* Accessibility focus outline */
+a:focus, button:focus, input:focus { outline: 2px solid #ffcc00; outline-offset: 2px; }
+
+/* Responsive */
+@media(max-width:768px){
+  .main-nav ul{ flex-direction:column; gap:15px; }
+  h1{ font-size:2.2rem; }
+  h2{ font-size:2rem; }
+  .projects-box{ flex:1 1 80%; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="main-nav" aria-label="Main Navigation" role="navigation">
+<ul>
+<li><a href="#hero">Home</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</nav>
+
+<!-- Hero Section -->
+<section id="hero">
+<div class="hero-content">
+<h1>Sajawal Ali</h1>
+<p>Front-End Developer | Crafting modern, responsive web experiences</p>
+<a href="#projects" class="btn">View My Work</a>
+</div>
+</section>
+
+<!-- About Section -->
+<section id="about">
+<div class="about-content">
+<div class="about-text">
+<h2>About Me</h2>
+<p>Hello! I’m Sajawal Ali, a passionate front-end developer creating modern, responsive, and accessible websites using HTML, CSS, JavaScript, and Bootstrap. I love turning ideas into functional designs with clean UI/UX.</p>
+<a href="#contact" class="btn">Hire Me</a>
+</div>
+</div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects">
+<h2>My Projects</h2>
+<div class="projects-grid">
+<div class="projects-box">Gym Website – Responsive landing page with modern UI.</div>
+<div class="projects-box">Pizza Delivery – Interactive menu and order interface.</div>
+<div class="projects-box">Shopify Clone – E-commerce product showcase UI.</div>
+<div class="projects-box">Travel Agency “7 Continents” – Booking interface with responsive design.</div>
+</div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+<h2>Contact Me</h2>
+<p>Let’s collaborate! Send me a message for project inquiries or collaborations.</p>
+<div class="contact-box">
+<form aria-label="Contact Form">
+<label>Name</label>
+<input type="text" class="form-control mb-2" required>
+<label>Email</label>
+<input type="email" class="form-control mb-2" required>
+<label>Message</label>
+<input type="text" class="form-control mb-2" required>
+<button class="btn w-100">Submit</button>
+</form>
+</div>
+</section>
+
+<footer>
+Designed by <span class="highlight">Sajawal Ali</span>
+</footer>
+
+</body>
+</html>

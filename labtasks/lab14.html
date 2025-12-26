@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Calculator</title>
+<style>
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f4f4f9;
+  font-family: Arial, sans-serif;
+}
+
+#calculator {
+  text-align: center;
+}
+
+#displayBox {
+  width: 280px;
+  height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 5px;
+  background: #fff;
+  position: relative;
+}
+
+#inputDisplay, #resultDisplay {
+  font-size: 18px;
+}
+
+#inputDisplay { text-align: left; }
+#resultDisplay { text-align: right; font-weight: bold; }
+
+button {
+  width: 50px;
+  height: 50px;
+  margin: 3px;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div id="calculator">
+  <div id="displayBox">
+    <div id="inputDisplay"></div>
+    <div id="resultDisplay"></div>
+  </div>
+
+  <!-- Buttons -->
+  <div>
+    <!-- Row 1 -->
+    <button onclick="appendValue('7')">7</button>
+    <button onclick="appendValue('8')">8</button>
+    <button onclick="appendValue('9')">9</button>
+    <button onclick="appendValue('/')">/</button>
+    <button onclick="backspace()">⌫</button>
+    <br>
+    <!-- Row 2 -->
+    <button onclick="appendValue('4')">4</button>
+    <button onclick="appendValue('5')">5</button>
+    <button onclick="appendValue('6')">6</button>
+    <button onclick="appendValue('*')">*</button>
+    <button onclick="square()">x²</button>
+    <br>
+    <!-- Row 3 -->
+    <button onclick="appendValue('1')">1</button>
+    <button onclick="appendValue('2')">2</button>
+    <button onclick="appendValue('3')">3</button>
+    <button onclick="appendValue('-')">-</button>
+    <button onclick="sqrt()">√</button>
+    <br>
+    <!-- Row 4 -->
+    <button onclick="appendValue('0')">0</button>
+    <button onclick="appendValue('.')">.</button>
+    <button onclick="appendValue('%')">%</button>
+    <button onclick="appendValue('+')">+</button>
+    <button onclick="calculateResult()">=</button>
+    <br>
+    <!-- Trigonometry -->
+    <button onclick="trig('sin')">sin</button>
+    <button onclick="trig('cos')">cos</button>
+    <button onclick="trig('tan')">tan</button>
+    <button onclick="clearDisplay()">C</button>
+  </div>
+</div>
+
+<script>
+let inputDisplay = document.getElementById("inputDisplay");
+let resultDisplay = document.getElementById("resultDisplay");
+let currentInput = "";
+
+// Append number/operator
+function appendValue(val) {
+  currentInput += val;
+  inputDisplay.innerText = currentInput;
+  resultDisplay.innerText = "";
+}
+
+// Clear display
+function clearDisplay() {
+  currentInput = "";
+  inputDisplay.innerText = "";
+  resultDisplay.innerText = "";
+}
+
+// Backspace
+function backspace() {
+  currentInput = currentInput.slice(0, -1);
+  inputDisplay.innerText = currentInput;
+}
+
+// Square
+function square() {
+  try { resultDisplay.innerText = eval(currentInput)**2; } 
+  catch { resultDisplay.innerText = "Error"; }
+}
+
+// Square root
+function sqrt() {
+  try { resultDisplay.innerText = Math.sqrt(eval(currentInput)); } 
+  catch { resultDisplay.innerText = "Error"; }
+}
+
+// Calculate
+function calculateResult() {
+  try {
+    let expr = currentInput.replace('%','/100');
+    resultDisplay.innerText = eval(expr);
+  } catch { resultDisplay.innerText = "Error"; }
+}
+
+// Trig functions in degrees
+function trig(func) {
+  try {
+    let deg = eval(currentInput);
+    let rad = deg * Math.PI / 180;
+    let res = func === 'sin' ? Math.sin(rad) :
+              func === 'cos' ? Math.cos(rad) :
+              Math.tan(rad);
+    resultDisplay.innerText = res.toFixed(6);
+  } catch { resultDisplay.innerText = "Error"; }
+}
+</script>
+
+</body>
+</html>

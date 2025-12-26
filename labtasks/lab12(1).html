@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>XSS Test</title>
+</head>
+<body>
+
+<h2>Insecure XSS Test</h2>
+
+<input id="comment" type="text">
+<button onclick="postComment()">Post</button>
+
+<div id="output"></div>
+
+<script>
+function postComment() {
+  var input = document.getElementById("comment").value;
+  document.getElementById("output").innerHTML = input;
+}
+
+// <img src=x onerror=alert('XSS')> to display alert on screen
+
+
+
+</script>
+
+</body>
+</html>

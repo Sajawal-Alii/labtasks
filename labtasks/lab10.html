@@ -69,15 +69,19 @@ const loadProducts = async () => {
 };
 
 // Render products
-const displayProducts = (items) => {
-    productList.innerHTML = items.map(({ name, price, category }) => `
-        <div class="card">
-            <h3>${name}</h3>
-            <p>Price: $${price}</p>
-            <p>Category: ${category}</p>
-        </div>
-    `).join("");
+const displayProducts = (items) =>{
+    productList.innerHTML=items.map(function(items){
+        return "<div class='card'>\n"+
+            "<h4>"+items.name+"</h4>\n"+
+            "<p>"+items.price+"</p>\n"+
+            "<p>"+items.category+"</p>\n"+
+            "</div>";
+    }).join("")
+
 };
+    
+
+
 
 // Sorting
 sortSelect.addEventListener("change", () => {
